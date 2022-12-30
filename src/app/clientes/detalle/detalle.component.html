@@ -1,10 +1,54 @@
-<div class="card container bg-dark text-white">
-    <div class="card-header">{{ titulo }}</div>
-    <div class="card-body">
-        <div class="mb-3">
-            <label for="formFile" class="form-label">Subir foto</label>
-                <input  (change)="seleccionarFoto($event)" class="form-control" type="file" id="formFile">
+<div *ngIf="modalService.modal" class="abrir-modal">
+    <div class="modal" tabindex="-1" role="dialog" style="display: block;">
+        <div class="modal-dialog  modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ titulo }}</h5>
+                    <button (click)="cerrarModal()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm">
+                                <img *ngIf="cliente?.foto else placeholder" style="max-height: 300px;"
+                                    src="http://localhost:8080/api/uploads/img/{{cliente.foto}}" alt="user image"
+                                    class="img-thumbnail rounded">
+                                <ng-template #placeholder>
+                                    <img src="http://localhost:8080/api/uploads/img/placeholder.png"
+                                        style="max-height: 300px;" alt="placeholder">
+                                </ng-template>
+                            </div>
+
+                            <div class="col-sm mb-3">
+                                <ul *ngIf="cliente" class="list-group mb-3 text-dark">
+                                    <li class="list-group-item active">{{cliente.nombre}}</li>
+                                    <li class="list-group-item">{{cliente.apellido}}</li>
+                                    <li class="list-group-item">{{cliente.email}}</li>
+                                    <li class="list-group-item">{{cliente.createdAt | date:"fullDate"}}</li>
+                                </ul>
+                                <div class="mb-3">
+                                    <label for="formFile" class="form-label">Seleccionar foto</label>
+                                    <input (change)="seleccionarFoto($event)" class="form-control" type="file"
+                                        accept="image/*" id="formFile">
+                                </div>
+                                <button (click)="subirFoto()" class="btn btn-outline-secondary" type="button"
+                                    [disabled]="!imageSelected">Subir Foto</button>
+                            </div>
+                            <div *ngIf="progress > 0" class="progress" role="progressbar" aria-label="Basic example"
+                                attr.aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-bar progress-bar-striped" [ngStyle]="{width: progress+'%'}">
+                                    {{progress}}%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button (click)="cerrarModal()" type="button" class="btn btn-secondary"
+                        data-dismiss="modal">Close</button>
+                </div>
+            </div>
         </div>
-        <button (click)="subirFoto()" class="btn btn-outline-secondary" type="button">Guardar</button>
     </div>
 </div>

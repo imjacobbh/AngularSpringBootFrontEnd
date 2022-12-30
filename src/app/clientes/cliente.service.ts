@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Cliente } from './cliente';
 import { Observable, catchError, throwError, map, tap } from 'rxjs'
-import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { HttpClient, HttpEvent, HttpHeaders, HttpRequest } from '@angular/common/http'
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 @Injectable()
@@ -10,7 +10,6 @@ export class ClienteService {
   private urlEndpoint: string = "http://localhost:8080/api/clientes"
   private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
   constructor(private httpClient: HttpClient, private router: Router) { }
-
 
 
   getClientesPagination(page: number): Observable<any> {
@@ -112,18 +111,14 @@ export class ClienteService {
     )
   }
 
-  subirFoto(archivo: File, id: any): Observable<Cliente> {
+  subirFoto(archivo: File, id: any): Observable<HttpEvent<{}>> {
     let formData = new FormData();
     formData.append("file", archivo);
     formData.append("id", id);
-    return this.httpClient.post(`${this.urlEndpoint}/upload`, formData).pipe(
-      map((response: any) => {
-        return response.cliente as Cliente
-      }),
-      catchError(e => {
-        Swal.fire("Error al subir foto", e.error.mensaje, 'error');
-        return throwError(() => e);
-      })
-    );
+
+    const req = new HttpRequest('POST', `${this.urlEndpoint}/upload`, formData, {
+      reportProgress: true
+    })
+    return this.httpClient.request(req)
   }
 }

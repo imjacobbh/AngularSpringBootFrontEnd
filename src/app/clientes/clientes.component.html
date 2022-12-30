@@ -1,46 +1,57 @@
+<detalle-cliente *ngIf="clienteSeleccionado" [cliente]="clienteSeleccionado!">
+
+</detalle-cliente>
+
+
 <div class="container">
-
-
   <div class="card border-dark mb-3">
-  <div class="card-header">Clientes</div>
-  <div class="card-body text-dark">
-    <h5 class="card-title">Listado de clientes</h5>
-    <div class="my-2 text-left">
-      <button class="btn btn-rounded btn-primary" type="button" [routerLink]="['/clientes/form']">Crear Cliente</button>
-    </div>
-    <div>
-      
-    </div>
-    <table class="table table-table-bordered table-striped" *ngIf="clientes?.length != 0; else noData">
-      <thead>
-        <tr>
-          <th>id</th>
-          <th>nombre</th>
-          <th>apellido</th>
-          <th>email</th>
-          <th>fecha</th>
-          <th>editar</th>
-          <th>eliminar</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let cliente of clientes">
-          <td><button type="button" [routerLink]="['/clientes/details/', cliente.id]" class="btn btn-success">{{cliente.id}}</button></td>
-          <td>{{cliente.nombre}}</td>
-          <td>{{cliente.apellido | uppercase}}</td>
-          <td>{{cliente.email}}</td>
-          <td>{{cliente.createdAt | date: "EEEE dd, MMMM yyyy"}}</td>
-          <td><button [routerLink]="['/clientes/form/', cliente.id]" class="btn btn-primary">editar</button></td>
-          <td><button (click)="delete(cliente)" class="btn btn-danger">eliminar</button></td>
-        </tr>
-      </tbody>
-    </table>
-    <app-paginator *ngIf="paginator" [paginator] = "paginator"></app-paginator>
-    <ng-template #noData>
+    <div class="card-header">Clientes</div>
+    <div class="card-body text-dark">
+      <h5 class="card-title">Listado de clientes</h5>
+      <div class="my-2 text-left">
+        <button class="btn btn-rounded btn-primary" type="button" [routerLink]="['/clientes/form']">Crear
+          Cliente</button>
+      </div>
+      <div>
+
+      </div>
+      <table class="table table-table-bordered table-striped" *ngIf="clientes?.length != 0; else noData">
+        <thead>
+          <tr>
+            <th>perfil</th>
+            <th>nombre</th>
+            <th>apellido</th>
+            <th>email</th>
+            <th>fecha</th>
+            <th>editar</th>
+            <th>eliminar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cliente of clientes">
+            <td align="center">
+              <img *ngIf="cliente?.foto else placeholder" style="width: 50px; cursor: pointer;" (click)="abrirModal(cliente)"
+                src="http://localhost:8080/api/uploads/img/{{cliente.foto}}" alt="user image"
+                class="img-thumbnail rounded">
+              <ng-template #placeholder>
+                <img (click)="abrirModal(cliente)" src="http://localhost:8080/api/uploads/img/placeholder.png"
+                  style="width: 50px; cursor: pointer;" alt="placeholder">
+              </ng-template>
+            <td>{{cliente.nombre}}</td>
+            <td>{{cliente.apellido | uppercase}}</td>
+            <td>{{cliente.email}}</td>
+            <td>{{cliente.createdAt | date: "EEEE dd, MMMM yyyy"}}</td>
+            <td><button [routerLink]="['/clientes/form/', cliente.id]" class="btn btn-primary">editar</button></td>
+            <td><button (click)="delete(cliente)" class="btn btn-danger">eliminar</button></td>
+          </tr>
+        </tbody>
+      </table>
+      <app-paginator *ngIf="paginator" [paginator]="paginator"></app-paginator>
+      <ng-template #noData>
         <div class="alert alert-info">
           No se encontraron clientes en la base de datos
         </div>
-    </ng-template>
+      </ng-template>
+    </div>
   </div>
-</div>
 </div>

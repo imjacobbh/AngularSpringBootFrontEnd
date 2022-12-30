@@ -4,6 +4,7 @@ import { Cliente } from './cliente';
 import { ClienteService } from './cliente.service';
 import { tap } from "rxjs/operators"
 import { ActivatedRoute } from '@angular/router';
+import { ModalService } from './detalle/modal.service';
 @Component({
   selector: 'app-clientes',
   templateUrl: './clientes.component.html',
@@ -13,8 +14,8 @@ export class ClientesComponent implements OnInit {
 
   clientes?: Cliente[]
   paginator?: any
-
-  constructor(private clienteService: ClienteService, private activatedRoute: ActivatedRoute) {
+  clienteSeleccionado: Cliente | null = null
+  constructor(private clienteService: ClienteService, private activatedRoute: ActivatedRoute, private modalService: ModalService) {
 
   }
 
@@ -29,6 +30,15 @@ export class ClientesComponent implements OnInit {
       ).subscribe(
         response => this.paginator = response
       )
+    })
+
+    this.modalService.notifyUpload.subscribe(cliente => {
+      this.clientes = this.clientes?.map(clienteOriginal => {
+        if (clienteOriginal.id == cliente.id) {
+          clienteOriginal.foto = cliente.foto
+        }
+        return clienteOriginal
+      })
     })
   }
 
@@ -52,4 +62,8 @@ export class ClientesComponent implements OnInit {
     })
   }
 
+  abrirModal(cliente: Cliente) {
+    this.clienteSeleccionado = cliente
+    this.modalService.abrirModal()
+  }
 }
