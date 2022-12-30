@@ -1,0 +1,90 @@
+<div *ngIf="errores.length >0">
+  <ul *ngFor="let error of errores" class="alert alert-danger">
+    <li>{{error}}</li>
+  </ul>
+</div>
+
+<div class="card container bg-dark text-white">
+  <div class="card-header">{{ titulo }}</div>
+  <div class="card-body">
+    <form [formGroup]="clienteForm">
+      <div class="form-group row my-2">
+        <label for="nombre" class="col-form-label col-sm-2">Nombre</label>
+        <div class="col-sm-6">
+          <input type="text" name="nombre" class="form-control" formControlName="nombre">
+          <div
+            *ngIf="clienteForm.get('nombre')?.hasError('required')&& (clienteForm.get('nombre')?.dirty || clienteForm.get('nombre')?.touched)">
+            El nombre no puede ser vacio
+          </div>
+          <div
+            *ngIf="clienteForm.get('nombre')?.hasError('minlength')&& (clienteForm.get('nombre')?.dirty || clienteForm.get('nombre')?.touched)">
+            El nombre debe tener al menos 3 caracteres
+          </div>
+        </div>
+
+      </div>
+
+      <div class="form-group row my-2">
+        <label for="apellido" class="col-form-label col-sm-2">Apellido</label>
+        <div class="col-sm-6">
+          <input type="text" name="apellido" class="form-control" formControlName="apellido">
+          <div
+            *ngIf="clienteForm.get('apellido')?.hasError('required')&& (clienteForm.get('apellido')?.dirty || clienteForm.get('apellido')?.touched)">
+            El apellido no puede ser vacio
+          </div>
+          <div
+            *ngIf="clienteForm.get('apellido')?.hasError('minlength')&& (clienteForm.get('apellido')?.dirty || clienteForm.get('apellido')?.touched)">
+            El apellido debe tener al menos 3 caracteres
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group row  my-2">
+        <label for="email" class="col-form-label col-sm-2">Email</label>
+        <div class="col-sm-6">
+          <input type="email" name="email" class="form-control" formControlName="email">
+          <div
+            *ngIf="clienteForm.get('email')?.hasError('required')&& (clienteForm.get('email')?.dirty || clienteForm.get('email')?.touched)">
+            El email no puede ser vacio
+          </div>
+          <div
+            *ngIf="clienteForm.get('email')?.hasError('email')&& (clienteForm.get('email')?.dirty || clienteForm.get('email')?.touched)">
+            Ingrese un email valido
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group row my-2">
+        <label for="createdAt" class="col-form-label col-sm-2">Fecha de creación</label>
+        <div class="col-sm-6">
+            <!--input matInput [matDatepicker]="picker"   class="form-control" formControlName="createdAt">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker-->
+
+              <mat-form-field appearance="fill">
+                <mat-label>Selecciona una fecha</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="createdAt">
+                <mat-hint><div
+                  *ngIf="clienteForm.get('createdAt')?.hasError('required')&& (clienteForm.get('createdAt')?.dirty || clienteForm.get('createdAt')?.touched)">
+                  La fecha no puede estar vacia
+                </div></mat-hint>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+        </div>
+      </div>
+
+      <div class="form-group row  my-2">
+        <div class="col-sm-6">
+          <button class="btn btn-primary" [disabled]="!clienteForm.valid" (click)="create()" type="submit"
+            *ngIf="cliente == null else edit">Crear</button>
+          <ng-template #edit>
+            <button class="btn btn-primary" [disabled]="!clienteForm.valid" (click)="update()"
+              type="submit">Actualizar</button>
+
+          </ng-template>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

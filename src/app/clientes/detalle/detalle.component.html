@@ -1,0 +1,10 @@
+<div class="card container bg-dark text-white">
+    <div class="card-header">{{ titulo }}</div>
+    <div class="card-body">
+        <div class="mb-3">
+            <label for="formFile" class="form-label">Subir foto</label>
+                <input  (change)="seleccionarFoto($event)" class="form-control" type="file" id="formFile">
+        </div>
+        <button (click)="subirFoto()" class="btn btn-outline-secondary" type="button">Guardar</button>
+    </div>
+</div>
